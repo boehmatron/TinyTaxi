@@ -415,9 +415,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
 //        savePlayerScore()
         
-        if passengerNumber < startP[currentLevel - 1].count - 1 {
+        if passengerNumber <= startP[currentLevel - 1].count - 1 {
             
-            passengerNumber += 1
+            //passengerNumber += 1
             
             spawnPassenger(x: platformArray[startP[currentLevel - 1][passengerNumber]].position.x, y: platformArray[startP[currentLevel - 1][passengerNumber]].position.y, showDestinationInSpeechBubble: true, passengerAtCorrectDestination: false)
             
@@ -451,6 +451,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return duration
     }
     
+    func waitUntilTaxiHasStopped(platform: PlatformNode) {
+        
+        let wait = SKAction.wait(forDuration: 1)
+        let triggerOnboarding = SKAction.run({ () -> Void in
+            self.onBoardingPassengerFromPlatform(platform: platform)
+        })
+        let sequence = SKAction.sequence([wait, triggerOnboarding])
+        self.run(sequence)
+    
+    }
+    
     func onBoardingPassengerFromPlatform(platform: PlatformNode) {
         
         // Set direction and start walking animation
@@ -476,6 +487,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func offboardingPassengerFromTaxi(platform: PlatformNode){
+        
+        passengerNumber = passengerNumber + 1
         
         spawnPassenger(x: taxiNode.position.x, y: platform.position.y, showDestinationInSpeechBubble: false, passengerAtCorrectDestination: true)
         
@@ -539,7 +552,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: Collision Handling
-    
     func didBegin(_ contact: SKPhysicsContact) {
         
         print("update within the loop")
@@ -555,9 +567,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if passengerOnBoard == false {
                     
                     if startP[currentLevel - 1][passengerNumber] == 0 {
+                        waitUntilTaxiHasStopped(platform: platformNode1)
                         
-                        
-                            onBoardingPassengerFromPlatform(platform: platformNode1)
+//                            onBoardingPassengerFromPlatform(platform: platformNode1)
                         }
               
                 }
@@ -586,7 +598,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     if startP[currentLevel - 1][passengerNumber] == 1 {
                         
-                        onBoardingPassengerFromPlatform(platform: platformNode2)
+                        waitUntilTaxiHasStopped(platform: platformNode2)
+                        
+                        //onBoardingPassengerFromPlatform(platform: platformNode2)
                         
                     }
                 }
@@ -615,7 +629,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     if startP[currentLevel - 1][passengerNumber] == 2 {
                         
-                        onBoardingPassengerFromPlatform(platform: platformNode3!)
+                        waitUntilTaxiHasStopped(platform: platformNode3!)
+                        
+                        //onBoardingPassengerFromPlatform(platform: platformNode3!)
                         
                     }
                 }
@@ -644,7 +660,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     if startP[currentLevel - 1][passengerNumber] == 3 {
                         
-                        onBoardingPassengerFromPlatform(platform: platformNode4!)
+                        waitUntilTaxiHasStopped(platform: platformNode4!)
+                        
+                        //onBoardingPassengerFromPlatform(platform: platformNode4!)
                         
                     }
                 }
