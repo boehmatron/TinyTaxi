@@ -86,6 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Score
     let userDefaults = UserDefaults.standard
+    var playableMargin: CGFloat!
     
     var scoreTimer = Timer()
     var scoreLabel: SKLabelNode!
@@ -96,6 +97,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var totalScore :Int!
     
     var hud: SKNode?
+    var bg_scoreLabel: SKNode?
+    var bg_totalScoreLabel: SKNode?
+    
     
     
     // Menu
@@ -174,7 +178,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Calculate playable margin
         let maxAspectRatio: CGFloat = 16.0/9.0 // iPhone 5
         let maxAspectRatioHeight = size.width / maxAspectRatio
-        let playableMargin: CGFloat = (size.height - maxAspectRatioHeight)/2
+        playableMargin = (size.height - maxAspectRatioHeight)/2
         
         let playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2-25)
         
@@ -184,9 +188,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // make Nodes acccessible
         taxiNode = childNode(withName: "taxi") as? TaxiNode
-//        let taxiAnchorPoint = CGPoint(x: taxiNode.size.width/2, y: 0)
-//        
-//        taxiNode.physicsBody = SKPhysicsBody(rectangleOf: taxiNode.size, center: taxiAnchorPoint)
         
         blockNode = childNode(withName: "block") as? BlockNode
         platforms = childNode(withName: "platforms") as? PlatformsNode
@@ -209,6 +210,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformNode6 = childNode(withName: "//platform6") as? PlatformNode
         platformNode6?.physicsBody?.categoryBitMask = PhysicsCategory.Platform6
         
+        hud = childNode(withName: "//hud") as? SKSpriteNode
+        bg_scoreLabel = childNode(withName: "//bg_scoreLabel") as? SKSpriteNode
+        bg_totalScoreLabel = childNode(withName: "//bg_totalScoreLabel") as? SKSpriteNode
+        scoreLabel = childNode(withName: "//scoreLabel") as? SKLabelNode
+        totalScoreLabel = childNode(withName: "//totalScoreLabel") as? SKLabelNode
+        
 
         particles_left.position = CGPoint(x: -taxiNode.size.width-20, y: -taxiNode.size.height-20)
         particles_right.position = CGPoint(x: taxiNode.size.width+20, y: -taxiNode.size.height-20)
@@ -218,7 +225,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.particles_right.isHidden = true
 
         
-
+        setupHUD()
         
         
         // Iterate over all available platforms and put them into an array
@@ -253,6 +260,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // MARK: Setup Functions
+    
+    func setupHUD() {
+        //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - (self.hud?.frame.height)!)
+        //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - 30)
+
+        self.hud?.position = CGPoint(x: self.frame.width/2, y: self.size.height - (self.hud?.frame.height)! + 10)
+        bg_scoreLabel?.position = CGPoint(x: -300, y: 0)
+        bg_totalScoreLabel?.position = CGPoint(x: (self.hud?.frame.width)! - 500, y: 0)
+        
+//        scoreLabel.position = CGPoint(x: -300, y: -scoreLabel.frame.height/2)
+//        totalScoreLabel.position = CGPoint(x: (self.hud?.frame.width)! - 500, y: -totalScoreLabel.frame.height/2)
+//        
+        
+        
+        
+    }
     
     func setupWater(){
   
