@@ -180,7 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let maxAspectRatioHeight = size.width / maxAspectRatio
         playableMargin = (size.height - maxAspectRatioHeight)/2
         
-        let playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2-25)
+        let playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2)
         
         physicsBody = SKPhysicsBody(edgeLoopFrom: playableRect)
         physicsWorld.contactDelegate = self
@@ -265,13 +265,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - (self.hud?.frame.height)!)
         //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - 30)
 
-        self.hud?.position = CGPoint(x: self.frame.width/2, y: self.size.height - (self.hud?.frame.height)! + 10)
-        bg_scoreLabel?.position = CGPoint(x: -300, y: 0)
-        bg_totalScoreLabel?.position = CGPoint(x: (self.hud?.frame.width)! - 500, y: 0)
-        
-//        scoreLabel.position = CGPoint(x: -300, y: -scoreLabel.frame.height/2)
-//        totalScoreLabel.position = CGPoint(x: (self.hud?.frame.width)! - 500, y: -totalScoreLabel.frame.height/2)
-//        
+        self.hud?.position.y =  -10
         
         
         
