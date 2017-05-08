@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,25 +22,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="bg_loader" translatesAutoresizingMaskIntoConstraints="NO" id="zT3-gs-AHD">
-                                <rect key="frame" x="-7" y="0.0" width="388" height="667"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wAo-B1-AOT">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.85882352941176465" green="0.89803921568627454" blue="0.80784313725490198" alpha="1" colorSpace="deviceRGB"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2017 Johannes Böhm. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="obG-Y5-kRd">
                                 <rect key="frame" x="20" y="635" width="335" height="12"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="textColor" red="0.31759685277938843" green="0.42961129546165466" blue="0.22754129767417908" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="I4I-xs-Ygx">
+                                <rect key="frame" x="46" y="219" width="282" height="229"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="zT3-gs-AHD" secondAttribute="bottom" id="5dK-30-pud"/>
-                            <constraint firstItem="zT3-gs-AHD" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Gsn-UG-Z4d"/>
-                            <constraint firstItem="zT3-gs-AHD" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Oka-4f-Iq2"/>
-                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="20" symbolic="YES" id="SfN-ll-jLj"/>
-                            <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
-                            <constraint firstAttribute="trailing" secondItem="zT3-gs-AHD" secondAttribute="trailing" id="wT1-pu-tka"/>
+                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="4" id="EWK-cO-auj"/>
+                            <constraint firstItem="I4I-xs-Ygx" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="Lqi-6k-uip"/>
+                            <constraint firstItem="wAo-B1-AOT" firstAttribute="centerX" secondItem="I4I-xs-Ygx" secondAttribute="centerX" id="baf-xa-xhO"/>
+                            <constraint firstAttribute="trailing" secondItem="wAo-B1-AOT" secondAttribute="trailing" id="hqU-W1-Dic"/>
+                            <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" symbolic="YES" id="nt6-jW-y5V"/>
+                            <constraint firstItem="wAo-B1-AOT" firstAttribute="centerY" secondItem="I4I-xs-Ygx" secondAttribute="centerY" id="qD0-ao-ZT8"/>
+                            <constraint firstItem="wAo-B1-AOT" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="tb3-V5-PiZ"/>
+                            <constraint firstItem="wAo-B1-AOT" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="wIq-cl-vYm"/>
+                            <constraint firstItem="wAo-B1-AOT" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="xUc-Yb-i3l"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -49,6 +56,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg_loader" width="480" height="800"/>
+        <image name="logo" width="282" height="229"/>
     </resources>
 </document>

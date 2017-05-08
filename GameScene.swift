@@ -293,7 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         water2 = SKSpriteNode(imageNamed: "water_1")
         water2.anchorPoint = CGPoint.zero
-        water2.position = CGPoint(x: -self.size.width/2.0, y: 0)
+        water2.position = CGPoint(x: self.size.width/2.0-self.size.width, y: 0)
         water2.alpha = 0.75
         water2.zPosition = 200
         addChild(water2)
