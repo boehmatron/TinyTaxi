@@ -101,7 +101,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bg_totalScoreLabel: SKNode?
     
     
-    
     // Menu
     var overlay_bg: SKNode! = nil
     var menu_bg: SKNode! = nil
@@ -223,9 +222,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.taxiNode.addChild(particles_right)
         self.particles_left.isHidden = true
         self.particles_right.isHidden = true
-
-        
-        setupHUD()
         
         
         // Iterate over all available platforms and put them into an array
@@ -261,36 +257,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Setup Functions
     
-    func setupHUD() {
-        //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - (self.hud?.frame.height)!)
-        //self.hud?.position = CGPoint(x: self.frame.width/2, y: self.frame.height - 30)
-
-        self.hud?.position.y =  -10
-        
-        
-        
-    }
     
     func setupWater(){
   
         water = SKSpriteNode(imageNamed: "water_1")
         water.anchorPoint = CGPoint.zero
-        water.position = CGPoint(x: self.size.width/2.0, y: 0)
+        water.position = CGPoint(x: -50, y: 0)
         water.alpha = 0.75
-        water.zPosition = 200
+        water.zPosition = 150
         addChild(water)
         
-        let waterAnimation = SKAction.moveBy(x: 50, y: 4, duration: 4)
-        let waterAnimationReversed = SKAction.moveBy(x: -50, y: -4, duration: 4)
-        let waterAnimationSequence = SKAction.sequence([waterAnimation, waterAnimationReversed])
-        self.water.run(SKAction.repeatForever(waterAnimationSequence))
+        let waterAnimation = SKAction.moveBy(x: 50, y: 4, duration: 6)
+        let waterAnimationReversed = SKAction.moveBy(x: -50, y: -4, duration: 6)
+        let scale1 = SKAction.scaleX(to: 0.9, duration: 4)
+        let scale2 = SKAction.scaleX(to: 1, duration: 4)
+        let waterAnimationSequence = SKAction.sequence([waterAnimation, waterAnimationReversed, scale1, scale2])
+        let scaleSequence = SKAction.sequence([scale1, scale2])
+        let completeAnimation = SKAction.group([waterAnimationSequence, scaleSequence])
+        self.water.run(SKAction.repeatForever(completeAnimation))
         
         water2 = SKSpriteNode(imageNamed: "water_1")
         water2.anchorPoint = CGPoint.zero
         water2.position = CGPoint(x: self.size.width/2.0-self.size.width, y: 0)
         water2.alpha = 0.75
         water2.zPosition = 200
-        addChild(water2)
+        //addChild(water2)
         
         let waterAnimation2 = SKAction.moveBy(x: 50, y: 4, duration: 4)
         let waterAnimationReversed2 = SKAction.moveBy(x: -50, y: -4, duration: 4)
