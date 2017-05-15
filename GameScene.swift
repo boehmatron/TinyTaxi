@@ -102,10 +102,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // Menu
+    var menuIsVisible: Bool = false
     var overlay_bg: SKNode! = nil
     var menu_bg: SKNode! = nil
     var menuTitleLabel : SKLabelNode?
     var startGameLabel: SKLabelNode?
+    var btn_pause: SKSpriteNode?
     
     // --
     var passengerAnimation = [SKTexture]()
@@ -168,6 +170,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupOverlay()
         setupScoreLabels()
         setupPlayerScores()
+        setupPauseButton()
 
         
         if (currentLevel > 1) {
@@ -215,6 +218,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel = childNode(withName: "//scoreLabel") as? SKLabelNode
         totalScoreLabel = childNode(withName: "//totalScoreLabel") as? SKLabelNode
         
+        btn_pause = childNode(withName: "//btn_pause") as? SKSpriteNode
+        
 
         particles_left.position = CGPoint(x: -taxiNode.size.width-20, y: -taxiNode.size.height-20)
         particles_right.position = CGPoint(x: taxiNode.size.width+20, y: -taxiNode.size.height-20)
@@ -257,6 +262,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Setup Functions
     
+    func setupPauseButton(){
+        //self.btn_pause?.position.y = self.size.width
+        print("button is set")
+    }
     
     func setupWater(){
   
@@ -813,6 +822,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Loop over all the touches in this event
         for touch: AnyObject in touches {
+            
+            let pauseLocation = touch.location(in: self)
+            if btn_pause!.contains(pauseLocation) {
+                showOverlay()
+            }
+            
             // Get the location of the touch in this scene
             let location = touch.location(in: menu_bg)
             // Check if the location of the touch is within the button's bounds
@@ -855,13 +870,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         overlay_bg = SKSpriteNode(color: SKColor.black, size: CGSize(width: self.frame.width, height: self.frame.height))
         overlay_bg.position = CGPoint(x: self.frame.width/2 , y: self.frame.height/2)
         overlay_bg.alpha = 0
+        overlay_bg.zPosition = 500
         self.addChild(overlay_bg)
         
         menu_bg = SKSpriteNode(imageNamed: "menu_bg")
         
         // Put it in the center of the scene
-        menu_bg.position = CGPoint(x: self.frame.width/2 , y: self.frame.height+200)
-        menu_bg.zPosition = 1000
+        self.menu_bg.position = CGPoint(x: self.frame.width/2 , y: self.frame.height+200)
+        self.menu_bg.zPosition = 100
         
         self.addChild(menu_bg)
         
@@ -906,8 +922,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func showOverlay(){
         
-        let fadeInAction = SKAction.fadeAlpha(to: 0.5, duration: 0.5)
-        self.overlay_bg.run(fadeInAction)
+        if (menuIsVisible == false){
+            
+            let fadeInAction = SKAction.fadeAlpha(to: 0.5, duration: 0.1)
+            
+            self.btn_pause?.texture = SKTexture(imageNamed: "btn_close")
+            self.overlay_bg.run(fadeInAction)
+            
+            menuIsVisible = true
+
+        } else {
+            
+            let fadeOutAction = SKAction.fadeAlpha(to: 0.0, duration: 0.1)
+            
+            self.btn_pause?.texture = SKTexture(imageNamed: "btn_pause")
+            self.overlay_bg.run(fadeOutAction)
+            
+            menuIsVisible = false
+            
+        }
+        
+        
         
         let screenCenter = CGPoint(x: self.size.width/2, y: self.size.height/2)
         let centerOverlayAction = SKAction.move(to: screenCenter, duration: 2)
