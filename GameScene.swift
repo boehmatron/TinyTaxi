@@ -829,15 +829,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             // Get the location of the touch in this scene
-            let location = touch.location(in: menu_bg)
+            let location = touch.location(in: self)
             // Check if the location of the touch is within the button's bounds
             if startGameLabel!.contains(location) {
                 print("tapped!")
-                hideMenu()
+                //hideMenu()
+                goToMain()
                 
                 //                self.myGameViewController.displayAd()
                 
-                nextLevel()
+                //nextLevel()
                 //                if (self.interstitialAd.isReady) {
                 //                    self.interstitialAd.presentFromRootViewController(self)
                 //                    
@@ -861,6 +862,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view!.presentScene(scene)
     }
     
+    func goToMain(){
+        
+        let scene = Scoreboard(fileNamed: "MainMenu")
+        scene!.scaleMode = .aspectFill
+        view!.presentScene(scene)
+        
+    }
+    
     
     // MARK: Everything Overlay related
     func setupOverlay(){
@@ -879,31 +888,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.menu_bg.position = CGPoint(x: self.frame.width/2 , y: self.frame.height+200)
         self.menu_bg.zPosition = 100
         
-        self.addChild(menu_bg)
+        //self.addChild(menu_bg)
         
         self.menuTitleLabel = SKLabelNode(fontNamed: "Chalkduster")
-        self.startGameLabel = SKLabelNode(fontNamed: "Chalkduster")
-        
         self.menuTitleLabel!.fontSize = 36
-        self.startGameLabel!.fontSize = 22
-        
         self.menuTitleLabel?.fontColor = UIColor.red
-        self.startGameLabel?.fontColor = UIColor.red
-        
         self.menuTitleLabel!.text = "Tiny Taxi Menu"
-        self.startGameLabel!.text = "Start Game"
-        
         self.menuTitleLabel!.name = "menuTitle"
-        self.startGameLabel!.name = "startGame"
-        
         self.menuTitleLabel!.zPosition = 1001
-        self.startGameLabel!.zPosition = 1002
-        
-        self.menu_bg.addChild(menuTitleLabel!)
-        self.menu_bg.addChild(startGameLabel!)
-        
         self.menuTitleLabel!.position = CGPoint(x: 0, y: 50)
-        self.startGameLabel!.position = CGPoint(x: 0, y: 0)
+        
+        
+        self.startGameLabel = SKLabelNode(fontNamed: "Chalkduster")
+        self.startGameLabel!.fontSize = 22
+        self.startGameLabel?.fontColor = UIColor.white
+        self.startGameLabel!.text = "Start Game"
+        self.startGameLabel!.name = "startGame"
+        self.startGameLabel!.zPosition = 1002
+        self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -20)
+        
+        //self.menu_bg.addChild(menuTitleLabel!)
+        self.addChild(startGameLabel!)
+        
+
+
         
     }
     
@@ -924,29 +932,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if (menuIsVisible == false){
             
-            let fadeInAction = SKAction.fadeAlpha(to: 0.5, duration: 0.1)
+            let fadeInAction = SKAction.fadeAlpha(to: 0.5, duration: 0.2)
+            let screenCenter = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
+            let moveToCenterAction = SKAction.move(to: screenCenter, duration: 0.4)
             
             self.btn_pause?.texture = SKTexture(imageNamed: "btn_close")
+
             self.overlay_bg.run(fadeInAction)
+            self.startGameLabel?.run(moveToCenterAction)
             
             menuIsVisible = true
 
         } else {
             
-            let fadeOutAction = SKAction.fadeAlpha(to: 0.0, duration: 0.1)
+            let fadeOutAction = SKAction.fadeAlpha(to: 0.0, duration: 0.4)
+            let moveOutOfSceenAction = SKAction.move(to: CGPoint(x: self.frame.width/2, y: -20), duration: 0.2)
             
             self.btn_pause?.texture = SKTexture(imageNamed: "btn_pause")
+            
             self.overlay_bg.run(fadeOutAction)
+            self.startGameLabel?.run(moveOutOfSceenAction)
             
             menuIsVisible = false
             
         }
-        
-        
-        
-        let screenCenter = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        let centerOverlayAction = SKAction.move(to: screenCenter, duration: 2)
-        self.menu_bg.run(centerOverlayAction)
+
         //blurWithCompletion()
         
     }
