@@ -443,7 +443,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             passengerNumber = 1
             print("level finished")
 //            SwiftyAds.shared.showInterstitial(withInterval: 1, from: view?.window?.rootViewController)
-            showOverlay()
+            //showOverlay()
+            nextLevel()
             
         }
     }
@@ -859,14 +860,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         currentLevel += 1
         
         let scene = Scoreboard(fileNamed: "Scoreboard")
-        view!.presentScene(scene)
+        view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
     }
     
     func goToMain(){
         
         let scene = Scoreboard(fileNamed: "MainMenu")
         scene!.scaleMode = .aspectFill
-        view!.presentScene(scene)
+        view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
         
     }
     
@@ -902,7 +903,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.startGameLabel = SKLabelNode(fontNamed: "Chalkduster")
         self.startGameLabel!.fontSize = 22
         self.startGameLabel?.fontColor = UIColor.white
-        self.startGameLabel!.text = "Start Game"
+        self.startGameLabel!.text = "Quit Game"
         self.startGameLabel!.name = "startGame"
         self.startGameLabel!.zPosition = 1002
         self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -20)
