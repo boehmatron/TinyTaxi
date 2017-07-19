@@ -108,6 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var menuTitleLabel : SKLabelNode?
     var startGameLabel: SKLabelNode?
     var btn_pause: SKSpriteNode?
+    var touchesEnabled: Bool = true
     
     // --
     var passengerAnimation = [SKTexture]()
@@ -769,6 +770,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: User Interactions
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        if touchesEnabled == true {
         // to stop the countdown action
         //if actionForKey("countdown") != nil {removeActionForKey("countdown")}
         
@@ -809,6 +811,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
         }
+        }
         
     } // <-- end touches began
 
@@ -826,6 +829,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let pauseLocation = touch.location(in: self)
             if btn_pause!.contains(pauseLocation) {
+            
                 showOverlay()
             }
             
@@ -852,7 +856,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     class func level(_ levelNum: Int) -> GameScene? {
         let scene = GameScene(fileNamed: "Level\(levelNum)")!
         scene.currentLevel = levelNum
-        scene.scaleMode = .aspectFill
+        scene.scaleMode = .aspectFit
         return scene
     }
     
@@ -866,7 +870,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func goToMain(){
         
         let scene = Scoreboard(fileNamed: "MainMenu")
-        scene!.scaleMode = .aspectFill
+        scene!.scaleMode = .aspectFit
         view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
         
     }
@@ -891,8 +895,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //self.addChild(menu_bg)
         
-        self.menuTitleLabel = SKLabelNode(fontNamed: "Chalkduster")
-        self.menuTitleLabel!.fontSize = 36
+        self.menuTitleLabel = SKLabelNode(fontNamed: "Block Out")
+        self.menuTitleLabel!.fontSize = 48
         self.menuTitleLabel?.fontColor = UIColor.red
         self.menuTitleLabel!.text = "Tiny Taxi Menu"
         self.menuTitleLabel!.name = "menuTitle"
@@ -900,13 +904,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.menuTitleLabel!.position = CGPoint(x: 0, y: 50)
         
         
-        self.startGameLabel = SKLabelNode(fontNamed: "Chalkduster")
-        self.startGameLabel!.fontSize = 22
+        self.startGameLabel = SKLabelNode(fontNamed: "Block Out")
+        self.startGameLabel!.fontSize = 48
         self.startGameLabel?.fontColor = UIColor.white
         self.startGameLabel!.text = "Quit Game"
         self.startGameLabel!.name = "startGame"
         self.startGameLabel!.zPosition = 1002
-        self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -20)
+        self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -50)
         
         //self.menu_bg.addChild(menuTitleLabel!)
         self.addChild(startGameLabel!)
@@ -933,6 +937,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if (menuIsVisible == false){
             
+            touchesEnabled = false
+            
             let fadeInAction = SKAction.fadeAlpha(to: 0.5, duration: 0.2)
             let screenCenter = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
             let moveToCenterAction = SKAction.move(to: screenCenter, duration: 0.4)
@@ -946,8 +952,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         } else {
             
+            touchesEnabled = true
+            
             let fadeOutAction = SKAction.fadeAlpha(to: 0.0, duration: 0.4)
-            let moveOutOfSceenAction = SKAction.move(to: CGPoint(x: self.frame.width/2, y: -20), duration: 0.2)
+            let moveOutOfSceenAction = SKAction.move(to: CGPoint(x: self.frame.width/2, y: -50), duration: 0.2)
             
             self.btn_pause?.texture = SKTexture(imageNamed: "btn_pause")
             
