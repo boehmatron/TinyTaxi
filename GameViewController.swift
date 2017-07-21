@@ -25,7 +25,7 @@ class GameViewController: UIViewController {
         )
         SwiftyAds.shared.showBanner(from: self)
         
-        let scene = GameScene(fileNamed: "Level1")
+        let scene = GameScene(fileNamed: "Level0")
         //let scene = MainMenu(fileNamed: "MainMenu") //This can be any  scene you want the game to load first
         
         let skView = self.view as! SKView

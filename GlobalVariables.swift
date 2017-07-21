@@ -15,4 +15,4 @@ class GlobalVariables {
     }
 }
 
-var global = GlobalVariables(currentLevel: 1)
+var global = GlobalVariables(currentLevel: 0)

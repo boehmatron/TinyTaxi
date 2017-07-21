@@ -32,6 +32,11 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // TODO: Sprite zum aktuellen Taxi-Standpunkt laufen lassen
 
+public extension SKNode {
+    public func actionForKeyIsRunning(key: String) -> Bool {
+        return self.action(forKey: key) != nil ? true : false
+    }
+}
 
 struct PhysicsCategory {
     static let None:        UInt32 = 0
@@ -80,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Variable Definitions
     var myGameViewController = GameViewController.self
-    var currentLevel: Int = 1
+    var currentLevel: Int = 0
     let passengerSpeed: Float = 20.0
 
     
@@ -123,6 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     var passenger: PassengerNode!
+    var passengerStatus: String = ""
     
     var platforms: PlatformsNode!
     var platformNode1: PlatformNode!
@@ -148,12 +154,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: Level Configuration
-    var startP: [[Int]] =    [[0, 0],
+    var startP: [[Int]] =    [[0],
                               [2, 1, 3],
                               [2,1]
     ]
     
-    var destP: [[Int]] =   [[2, 1],
+    var destP: [[Int]] =   [[2],
                             [0, 2, 1],
                             [3,0]
     ]
@@ -172,6 +178,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupScoreLabels()
         setupPlayerScores()
         setupPauseButton()
+        
+        passengerStatus = "hidden"
 
         
         if (currentLevel > 1) {
@@ -240,7 +248,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformArray.sort { $0.name < $1.name }
         print("Number of platforms in Array:", platformArray.count)
         
-        spawnPassenger(x: platformArray[startP[currentLevel - 1][passengerNumber]].position.x, y: platformArray[startP[currentLevel - 1][passengerNumber]].position.y, showDestinationInSpeechBubble: true, passengerAtCorrectDestination: false)
+        spawnPassenger(x: platformArray[startP[currentLevel][passengerNumber]].position.x, y: platformArray[startP[currentLevel][passengerNumber]].position.y, showDestinationInSpeechBubble: true, passengerAtCorrectDestination: false)
         
     }
     
@@ -257,7 +265,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             taxiNode.physicsBody?.velocity=CGVector(dx:(taxiNode.physicsBody?.velocity.dx)!+relVel.dx*rate, dy:(taxiNode.physicsBody?.velocity.dy)!+relVel.dy*rate);
         }
         
-        print(passengerOnBoard)
+        //print(passengerOnBoard)
         
     }
     
@@ -320,7 +328,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.levelScore = 0
         self.scoreLabel.text = String(levelScore)
         
-        if (currentLevel <= 1) {
+        if (currentLevel <= 0) {
             self.totalScore = 0
         } else {
             self.totalScore = userDefaults.integer(forKey: "totalScore")
@@ -354,7 +362,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func showDestination(){
         
-        switch destP[currentLevel - 1][passengerNumber] {
+        switch destP[currentLevel][passengerNumber] {
         case 0:
             destinationSign = SKSpriteNode(imageNamed: "chat_1")
         case 1:
@@ -414,7 +422,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.passengerOnTheWayToGate = false
             self.correctPlatform = false
             showDestination()
+            self.passengerStatus = "waiting"
         } else {
+            
+            self.passengerStatus = "offboarding"
 
         }
         
@@ -433,15 +444,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
 //        savePlayerScore()
         
-        if passengerNumber <= startP[currentLevel - 1].count - 1 {
+        if passengerNumber < startP[currentLevel].count - 1 {
             
-            //passengerNumber += 1
+            passengerNumber += 1
             
-            spawnPassenger(x: platformArray[startP[currentLevel - 1][passengerNumber]].position.x, y: platformArray[startP[currentLevel - 1][passengerNumber]].position.y, showDestinationInSpeechBubble: true, passengerAtCorrectDestination: false)
+            spawnPassenger(x: platformArray[startP[currentLevel][passengerNumber]].position.x, y: platformArray[startP[currentLevel][passengerNumber]].position.y, showDestinationInSpeechBubble: true, passengerAtCorrectDestination: false)
             
         } else {
             
-            passengerNumber = 1
+            passengerNumber = 0
             print("level finished")
 //            SwiftyAds.shared.showInterstitial(withInterval: 1, from: view?.window?.rootViewController)
             //showOverlay()
@@ -461,6 +472,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Passenger Animations
     
+    func movePassengerToward(location: CGPoint) {
+        let offset = CGPoint(x: location.x - passenger.position.x, y: location.y - passenger.position.y)
+        let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
+        let direction = CGPoint(x: offset.x / CGFloat(length),
+                                y: offset.y / CGFloat(length))
+       // velocity = CGPoint(x: direction.x * passengerMovePointsPerSec, y: direction.y * passengerMovePointsPerSec)
+    }
+    
     // Calculate action duration btw two points and speed
     func getDuration(pointA:CGPoint,pointB:CGPoint,speed:CGFloat)->TimeInterval {
         let xDist = (pointB.x - pointA.x)
@@ -475,6 +494,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let wait = SKAction.wait(forDuration: 1)
         let triggerOnboarding = SKAction.run({ () -> Void in
             self.onBoardingPassengerFromPlatform(platform: platform)
+            self.passengerStatus = "onboarding"
         })
         let sequence = SKAction.sequence([wait, triggerOnboarding])
         self.run(sequence)
@@ -507,7 +527,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func offboardingPassengerFromTaxi(platform: PlatformNode){
         
-        passengerNumber = passengerNumber + 1
+        passengerOnBoard = false
+        
+        if (!passenger.actionForKeyIsRunning(key: "isOffboarding")){
+        
+            //if passengerNumber <= destP[currentLevel].count {
+            //passengerNumber = passengerNumber + 1
+            //}
         
         spawnPassenger(x: taxiNode.position.x, y: platform.position.y, showDestinationInSpeechBubble: false, passengerAtCorrectDestination: true)
         
@@ -544,6 +570,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         passenger.run(offBoardActionSequence, withKey: "isOffoarding")
  
         print("timer invalidate")
+        }
         
     }
     
@@ -585,7 +612,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 if passengerOnBoard == false {
                     
-                    if startP[currentLevel - 1][passengerNumber] == 0 {
+                    if startP[currentLevel][passengerNumber] == 0 {
                         waitUntilTaxiHasStopped(platform: platformNode1)
                         
 //                            onBoardingPassengerFromPlatform(platform: platformNode1)
@@ -593,8 +620,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
               
                 }
                 if passengerOnBoard == true {
+                    print(destP[currentLevel])
+                    print(passengerNumber)
                     
-                    if destP[currentLevel - 1][passengerNumber] == 0 {
+                    if destP[currentLevel][passengerNumber] == 0 {
                         
                         offboardingPassengerFromTaxi(platform: platformNode1)
                         
@@ -615,7 +644,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 if passengerOnBoard == false {
                     
-                    if startP[currentLevel - 1][passengerNumber] == 1 {
+                    if startP[currentLevel][passengerNumber] == 1 {
                         
                         waitUntilTaxiHasStopped(platform: platformNode2)
                         
@@ -625,7 +654,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 if passengerOnBoard == true {
                     
-                    if destP[currentLevel - 1][passengerNumber] == 1 {
+                    if destP[currentLevel][passengerNumber] == 1 {
                         
                         offboardingPassengerFromTaxi(platform: platformNode2)
                         
@@ -646,7 +675,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 if passengerOnBoard == false {
                     
-                    if startP[currentLevel - 1][passengerNumber] == 2 {
+                    if startP[currentLevel][passengerNumber] == 2 {
                         
                         waitUntilTaxiHasStopped(platform: platformNode3!)
                         
@@ -656,7 +685,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 if passengerOnBoard == true {
                     
-                    if destP[currentLevel - 1][passengerNumber] == 2 {
+                    if destP[currentLevel][passengerNumber] == 2 {
                         
                         offboardingPassengerFromTaxi(platform: platformNode3!)
                         
@@ -677,7 +706,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 if passengerOnBoard == false {
                     
-                    if startP[currentLevel - 1][passengerNumber] == 3 {
+                    if startP[currentLevel][passengerNumber] == 3 {
                         
                         waitUntilTaxiHasStopped(platform: platformNode4!)
                         
@@ -687,7 +716,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 if passengerOnBoard == true {
                     
-                    if destP[currentLevel - 1][passengerNumber] == 3 {
+                    if destP[currentLevel][passengerNumber] == 3 {
                         
                         offboardingPassengerFromTaxi(platform: platformNode4!)
                         
