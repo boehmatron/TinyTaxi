@@ -154,13 +154,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: Level Configuration
-    var startP: [[Int]] =    [[0],
-                              [2, 1, 3],
+    var startP: [[Int]] =    [[0,2,1],
+                              [2, 1, 3, 0],
                               [2,1]
     ]
     
-    var destP: [[Int]] =   [[2],
-                            [0, 2, 1],
+    var destP: [[Int]] =   [[1,0,0],
+                            [0, 2, 1, 2],
                             [3,0]
     ]
     
@@ -936,7 +936,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.startGameLabel = SKLabelNode(fontNamed: "Block Out")
         self.startGameLabel!.fontSize = 48
         self.startGameLabel?.fontColor = UIColor.white
-        self.startGameLabel!.text = "Quit Game"
+        self.startGameLabel!.text = "Back to Main Menu"
         self.startGameLabel!.name = "startGame"
         self.startGameLabel!.zPosition = 1002
         self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -50)
