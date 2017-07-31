@@ -180,6 +180,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupPauseButton()
         
         passengerStatus = "hidden"
+        
+        // BackgroundMusic
+        SKTAudio.sharedInstance()
+        .playBackgroundMusic("musicLoop_tinyTaxy.wav")
 
         
         if (currentLevel > 1) {
@@ -365,16 +369,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switch destP[currentLevel][passengerNumber] {
         case 0:
             destinationSign = SKSpriteNode(imageNamed: "chat_1")
+            
+            //SKTAudio.sharedInstance()
+              //  .playSoundEffect("vocal_01.wav")
         case 1:
             destinationSign = SKSpriteNode(imageNamed: "chat_2")
+            
+          //  SKTAudio.sharedInstance()
+            //    .playSoundEffect("vocal_02.wav")
         case 2:
             destinationSign = SKSpriteNode(imageNamed: "chat_3")
+            
+           // SKTAudio.sharedInstance()
+             //   .playSoundEffect("vocal_03.wav")
         case 3:
             destinationSign = SKSpriteNode(imageNamed: "chat_4")
+            
+            SKTAudio.sharedInstance()
+                .playSoundEffect("vocal_04.wav")
         case 4:
             destinationSign = SKSpriteNode(imageNamed: "chat_5")
+            
+            SKTAudio.sharedInstance()
+                .playSoundEffect("vocal_05.wav")
         case 5:
             destinationSign = SKSpriteNode(imageNamed: "chat_6")
+            
+            SKTAudio.sharedInstance()
+                .playSoundEffect("vocal_06.wav")
             
         default:
             destinationSign = SKSpriteNode(imageNamed: "chat_1")
@@ -391,6 +413,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let show = SKAction.scale(to: 1.0, duration: 0.2)
         let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.2)
+        let speak = SKAction.playSoundFileNamed("vocal_0\(destP[currentLevel][passengerNumber]+1).wav", waitForCompletion: false)
         let wait = SKAction.wait(forDuration: 2.0)
         let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.2)
         let moveDown = SKAction.moveBy(x: 0, y: -5.0, duration: 0.2)
@@ -398,7 +421,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let remove = SKAction.group([fadeOut, moveDown])
         
-        let showDestinationAction = SKAction.sequence([wait, fadeIn, show, wait, remove, removeFromParent])
+        let showDestinationAction = SKAction.sequence([wait, fadeIn, speak, show, wait, remove, removeFromParent])
         
         destinationSign!.run(showDestinationAction)
     }
@@ -893,10 +916,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         currentLevel += 1
         
         let scene = Scoreboard(fileNamed: "Scoreboard")
+        
+        SKTAudio.sharedInstance()
+            .pauseBackgroundMusic()
+        
         view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
     }
     
     func goToMain(){
+        
+        SKTAudio.sharedInstance()
+            .pauseBackgroundMusic()
         
         let scene = Scoreboard(fileNamed: "MainMenu")
         scene!.scaleMode = .aspectFit
@@ -936,7 +966,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.startGameLabel = SKLabelNode(fontNamed: "Block Out")
         self.startGameLabel!.fontSize = 48
         self.startGameLabel?.fontColor = UIColor.white
-        self.startGameLabel!.text = "Back to Main Menu"
+        self.startGameLabel!.text = "BACK TO MAIN MENU"
         self.startGameLabel!.name = "startGame"
         self.startGameLabel!.zPosition = 1002
         self.startGameLabel!.position = CGPoint(x: self.frame.width/2, y: -50)
