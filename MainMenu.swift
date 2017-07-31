@@ -45,17 +45,22 @@ class MainMenu: SKScene {
                 
                 //SwiftyAds.shared.showInterstitial(from: view?.window?.rootViewController)
                 SwiftyAds.shared.showBanner(at: .top, from: view?.window?.rootViewController)
-                let gameScene = GameScene.level(global.currentLevel)
                 
-//                self.scene?.view?.presentScene(gameScene!, transition: SKTransition.moveIn(with: SKTransitionDirection.up, duration: 1))
+                //let gameScene = GameScene.level(global.currentLevel)
+                //self.scene?.view?.presentScene(gameScene!, transition: SKTransition.fade(withDuration: 2))
                 
-//                self.scene?.view?.presentScene(gameScene!, transition: SKTransition.reveal(with: SKTransitionDirection.down, duration: 1))
-                
-                self.scene?.view?.presentScene(gameScene!, transition: SKTransition.fade(withDuration: 2))
+                let scene = Introduction(fileNamed: "Introduction")
+                scene!.scaleMode = .aspectFit
+                view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
                 
             }
             
-            
+            if btn_resumeGame.contains(location) {
+                
+                let Scene = GameScene.level(global.currentLevel)
+                self.scene?.view?.presentScene(Scene!, transition: SKTransition.fade(withDuration: 2))
+            }
+                        
         }
     }
     

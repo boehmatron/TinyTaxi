@@ -156,12 +156,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: Level Configuration
     var startP: [[Int]] =    [[0,2,1],
                               [2, 1, 3, 0],
-                              [2,1]
+                              [2,1,3,0],
+                              [0,3,1,2],
+                              [2,4,3,1,4,4]
     ]
     
     var destP: [[Int]] =   [[1,0,0],
                             [0, 2, 1, 2],
-                            [3,0]
+                            [3,0,2,1],
+                            [2,2,0,3],
+                            [0,2,1,4,3,1]
     ]
     
     func timerTest(){
@@ -814,6 +818,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        // COLLISION ENDED PLATFORM 5
+        if collision == PhysicsCategory.Taxi | PhysicsCategory.Platform5 {
+            if (passenger != nil) {
+                
+                if passengerOnBoard == false && passengerOnTheWayToGate == false {
+                    
+                    self.passenger.removeAction(forKey: "isOnboarding")
+                    self.movePassengerBackToOrigin(platform: platformNode4!)
+                    
+                }
+            }
+        }
+
         
     }
     
@@ -916,6 +933,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         currentLevel += 1
         
         let scene = Scoreboard(fileNamed: "Scoreboard")
+        scene!.scaleMode = .aspectFit
         
         SKTAudio.sharedInstance()
             .pauseBackgroundMusic()

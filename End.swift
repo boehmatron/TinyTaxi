@@ -1,5 +1,5 @@
 //
-//  Scoreboard.swift
+//  Introduction.swift
 //  TinyTaxi
 //
 //  Created by Johannes Boehm on 05/03/17.
@@ -8,19 +8,23 @@
 
 import SpriteKit
 
-class Scoreboard: SKScene {
+class End: SKScene {
     
     var btn_continue = SKSpriteNode()
+    
+
     
     override func didMove(to view: SKView) {
         
         /* Setup your scene here */
-                    SwiftyAds.shared.showInterstitial(withInterval: 1, from: view.window?.rootViewController)
+                    //SwiftyAds.shared.showInterstitial(withInterval: 1, from: view.window?.rootViewController)
         
         //SwiftyAds.shared.showInterstitial(from: view.window?.rootViewController)
-        SwiftyAds.shared.showBanner(at: .top, from: view.window?.rootViewController)
+       // SwiftyAds.shared.showBanner(at: .top, from: view.window?.rootViewController)
         
         btn_continue = (childNode(withName: "btn_continue") as? SKSpriteNode)!
+
+        
         
     }
     
@@ -35,22 +39,12 @@ class Scoreboard: SKScene {
             
             if btn_continue.contains(location){
                 
-                if global.currentLevel == 4 {
-                    
-                    let scene = End(fileNamed: "End")
-                    scene!.scaleMode = .aspectFit
-                    view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
-                    
-                } else {
+                global.currentLevel = 0
                 
-                global.currentLevel += 1
-                
-                let Scene = GameScene.level(global.currentLevel)
-                
-                self.scene?.view?.presentScene(Scene!, transition: SKTransition.fade(withDuration: 2))
-                    
-                }
-                
+                let scene = MainMenu(fileNamed: "MainMenu")
+                scene!.scaleMode = .aspectFit
+                view!.presentScene(scene!, transition: SKTransition.fade(withDuration: 2))
+            
             }
         }
     }
