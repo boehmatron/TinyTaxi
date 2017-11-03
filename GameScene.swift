@@ -432,7 +432,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnPassenger( x: CGFloat, y: CGFloat, showDestinationInSpeechBubble: Bool, passengerAtCorrectDestination: Bool ){
         
-        passenger = PassengerNode(start: 0, destination: 1, texture: "sprite_1")
+        passenger = PassengerNode(start: 0, destination: 1, texture: "sprite_IDL")
         passenger.position.x = x
         passenger.position.y = y
         passenger.zPosition = 5
@@ -756,6 +756,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
             }
         } // end collision Taxi <-> Platform4
+        
+        // COLLISION PLATFORM 5
+        if collision == PhysicsCategory.Taxi | PhysicsCategory.Platform4 {
+            
+            if (passenger != nil) {
+                
+                if passengerOnBoard == false {
+                    
+                    if startP[currentLevel][passengerNumber] == 4 {
+                        
+                        waitUntilTaxiHasStopped(platform: platformNode5!)
+                        
+                        //onBoardingPassengerFromPlatform(platform: platformNode5!)
+                        
+                    }
+                }
+                if passengerOnBoard == true {
+                    
+                    if destP[currentLevel][passengerNumber] == 4 {
+                        
+                        offboardingPassengerFromTaxi(platform: platformNode5!)
+                        
+                    } else {
+                        
+                        print("wrong platform")
+                        
+                    }
+                }
+                
+            }
+        } // end collision Taxi <-> Platform5
         
     } // <-- end Collision Handling DID BEGIN CONTACT
     // Start Collision Handling DID END CONTACT

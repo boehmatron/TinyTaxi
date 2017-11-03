@@ -33,14 +33,14 @@ class PassengerNode: SKSpriteNode {
         // Animation Passenger
         // moving left
         var animationPassengerLeftAssets = [SKTexture]()
-        for i in 2...5 {
-            let name = "sprite_\(i)"
+        for i in 2...10 {
+            let name = "sprite_L_\(i)"
             animationPassengerLeftAssets.append(SKTexture(imageNamed: name))
         }
         self.animatePassengerLeftAction = SKAction.repeatForever(SKAction.animate(with: animationPassengerLeftAssets, timePerFrame: 0.1))
         //moving right
         var animationPassengerRightAssets = [SKTexture]()
-        for i in 2...5 {
+        for i in 2...10 {
             let name = "sprite_R_\(i)"
             animationPassengerRightAssets.append(SKTexture(imageNamed: name))
         }
@@ -66,7 +66,7 @@ class PassengerNode: SKSpriteNode {
     }
     
     func stopWalking(){
-        self.texture = SKTexture(imageNamed: "sprite_1")
+        self.texture = SKTexture(imageNamed: "sprite_IDL")
     }
     
     
